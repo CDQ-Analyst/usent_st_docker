@@ -31,11 +31,60 @@ cd ~
 
 git clone https://github.com/CDQ-Analyst/usent_st_docker.git
 
+#### The error -bash: git: command not found means that Git isn't installed on this EC2 instance yet. No worries, that's an easy fix.
 
+#### Here's what you need to do:
 
+#### Install Git:
 
+Bash
 
+sudo dnf install -y git
+#### (If dnf gives an error or isn't found, try sudo yum install -y git for older Amazon Linux versions).
 
+#### After Git finishes installing, you can then try the git clone command again.
+
+#### Clone your Git repository (usent_st_docker):
+
+git clone https://github.com/CDQ-Analyst/usent_st_docker.git
+
+#### Step 3: Build Your Docker Image
+#### Navigate into your cloned project directory:
+##### This is where your Dockerfile, requirements.txt, and Python script are.
+
+Bash
+
+cd usent_st_docker
+
+#### Build your Docker image:
+
+Bash
+
+docker build -t YOUR_DOCKERHUB_USERNAME/usent_streamlit_app:latest .
+docker build -t sulaymanaziz/usent_streamlit_app:latest .
+
+#### Important: Replace YOUR_DOCKERHUB_USERNAME with your actual Docker Hub username.
+#### The . at the end is crucial; it tells Docker to look for the Dockerfile in the current directory.
+#### This command will take some time as it downloads the base Python image and installs all your dependencies.
+
+Step 4: Run Your Docker Container
+Run the Docker container:
+
+Bash
+
+docker run -d -p 8501:8501 YOUR_DOCKERHUB_USERNAME/usent_streamlit_app:latest
+-d: Runs the container in detached mode (in the background).
+
+-p 8501:8501: Maps port 8501 on your EC2 instance to port 8501 inside the Docker container. This is how external web traffic reaches your Streamlit app.
+
+Replace YOUR_DOCKERHUB_USERNAME with your Docker Hub username.
+
+Verify the container is running:
+
+Bash
+
+docker ps
+You should see a list of running containers, and your usent_streamlit_app image should be listed with a "Up" status and port 0.0.0.0:8501->8501/tcp.
 
 
 
