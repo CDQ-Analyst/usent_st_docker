@@ -67,28 +67,83 @@ docker build -t sulaymanaziz/usent_streamlit_app:latest .
 #### The . at the end is crucial; it tells Docker to look for the Dockerfile in the current directory.
 #### This command will take some time as it downloads the base Python image and installs all your dependencies.
 
-Step 4: Run Your Docker Container
-Run the Docker container:
+#### Step 4: Run Your Docker Container
+#### Run the Docker container:
 
 Bash
 
 docker run -d -p 8501:8501 YOUR_DOCKERHUB_USERNAME/usent_streamlit_app:latest
--d: Runs the container in detached mode (in the background).
+docker run -d -p 8501:8501 sulaymanaziz/usent_streamlit_app:latest
 
--p 8501:8501: Maps port 8501 on your EC2 instance to port 8501 inside the Docker container. This is how external web traffic reaches your Streamlit app.
+#### -d: Runs the container in detached mode (in the background).
 
-Replace YOUR_DOCKERHUB_USERNAME with your Docker Hub username.
+#### -p 8501:8501: Maps port 8501 on your EC2 instance to port 8501 inside the Docker container. This is how external web traffic reaches your Streamlit app.
 
-Verify the container is running:
+##### Replace YOUR_DOCKERHUB_USERNAME with your Docker Hub username.
+
+##### Verify the container is running:
 
 Bash
 
 docker ps
-You should see a list of running containers, and your usent_streamlit_app image should be listed with a "Up" status and port 0.0.0.0:8501->8501/tcp.
+
+##### You should see a list of running containers, and your usent_streamlit_app image should be listed with a "Up" status and port 0.0.0.0:8501->8501/tcp.
 
 
+##### Step 5: Access Your Streamlit Application
+##### Get your EC2 Instance's Public IPv4 Address:
+
+##### Go to your AWS EC2 Console.
+
+##### Navigate to "Instances" and select your usent_st_docker instance.
+
+##### Find the "Public IPv4 address" in the instance details.
+
+##### Open your web browser (on your local machine):
+##### Enter the URL in this format:
+
+http://YOUR_EC2_PUBLIC_IP_ADDRESS:8501
+##### Your Streamlit application should now be accessible!
 
 
+Troubleshooting / Management Tips:
 
+If the app doesn't load:
 
+Double-check your Security Group: Ensure port 8501 is open in the Inbound Rules for your source IP (or 0.0.0.0/0).
+
+Check Docker logs: If the container exited or is stuck, check its logs:
+
+Bash
+
+docker logs <container_id>
+(Get <container_id> from docker ps -a which shows all containers, even stopped ones).
+
+Check container status:
+
+Bash
+
+docker ps -a
+
+If your container is not Up, look at its STATUS.
+
+To stop the running container:
+
+Bash
+
+docker stop <container_id>
+
+(Get <container_id> from docker ps)
+
+To remove the container (after stopping):
+
+Bash
+
+docker rm <container_id>
+
+To remove the image (if needed):
+
+Bash
+
+docker rmi YOUR_DOCKERHUB_USERNAME/usent_streamlit_app:latest
 
