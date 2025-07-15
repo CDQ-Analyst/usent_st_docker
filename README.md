@@ -1,3 +1,9 @@
+Step-by-Step Deployment of Dockerized Streamlit App on EC2
+You are currently connected to your usent_st_docker EC2 instance via SSH.
+
+Step 1: Prepare the EC2 Instance (Install Docker)   in EC2:
+Update system packages:
+
 sudo dnf update -y
 #### (Using dnf as it's common for Amazon Linux 2023. If dnf is not found, try sudo yum update -y)
 
@@ -19,6 +25,13 @@ exit # This will close your current SSH connection
 #### Reconnect to your EC2 instance via SSH:
 
 ssh -i /path/to/your-key-pair.pem ec2-user@YOUR_EC2_PUBLIC_IP_OR_DNS
+ssh -i /path/to/usent-st-docker-kp.pem ec2-user@44.212.65.235
+
+you should see:
+Are you sure you want to continue connecting (yes/no/[fingerprint])? yes
+Warning: Permanently added '44.212.65.235' (ED25519) to the list of known hosts.
+ec2-user@44.212.65.235: Permission denied (publickey,gssapi-keyex,gssapi-with-mic).
+
 
 #### Verify Docker permissions (optional, but good check):
 docker ps
@@ -34,7 +47,7 @@ git clone https://github.com/CDQ-Analyst/usent_st_docker.git
 #### The error -bash: git: command not found means that Git isn't installed on this EC2 instance yet. No worries, that's an easy fix.
 
 #### Here's what you need to do:
-
+#### connect to your EC2 again  <=====
 #### Install Git:
 
 Bash
@@ -105,6 +118,7 @@ docker ps
 http://YOUR_EC2_PUBLIC_IP_ADDRESS:8501
 ##### Your Streamlit application should now be accessible!
 
+######################################################################################################
 
 Troubleshooting / Management Tips:
 
@@ -147,3 +161,48 @@ Bash
 
 docker rmi YOUR_DOCKERHUB_USERNAME/usent_streamlit_app:latest
 
+
+################################################################################
+##### Here's the typical workflow after you've stopped and started your EC2 instance:
+
+Get the New Public IP Address of Your EC2 Instance:
+
+After starting your EC2 instance in the AWS console, go to the EC2 Instances list.
+
+Select your usent_st_docker instance.
+
+##### Note down its new Public IPv4 Address.
+
+##### Reconnect to your EC2 instance via SSH:
+
+##### Use the new Public IP Address in your SSH command from your local machine.
+
+Bash
+
+ssh -i "C:\Users\sulay\.ssh\st-demo.pem" ec2-user@NEW_EC2_PUBLIC_IP_ADDRESS
+ssh -i "C:\Users\sulay\.ssh\st-demo.pem" ec2-user@54.209.157.224
+
+#### 2. Start the Existing Docker Container (Preferred Method):
+
+When you run docker run as you did, it creates a new container instance. Even after stopping, that container instance still exists (in a stopped state). You can restart the same container.
+
+First, list all containers (including stopped ones) to get its ID or name:
+
+Bash
+
+docker ps -a
+
+You'll see your container (recursing_zhukovsky or similar name, or its CONTAINER ID).
+
+Then, start it:
+
+Bash
+
+docker start <CONTAINER_ID_OR_NAME>
+For example: docker start recursing_zhukovsky or docker start 8524ae4a1f45
+
+Verify it's running:
+
+Bash
+
+docker ps
