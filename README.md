@@ -8,41 +8,41 @@ sudo dnf update -y
 #### (Using dnf as it's common for Amazon Linux 2023. If dnf is not found, try sudo yum update -y)
 
 #### Install Docker:
-sudo dnf install docker -y
+sudo dnf install docker -y     <=====
 
 #### Start the Docker service:
-sudo service docker start
+sudo service docker start    <=====
 
 #### Add your ec2-user to the docker group:
 #### This allows you to run Docker commands without needing sudo every time.
-sudo usermod -aG docker ec2-user
+sudo usermod -aG docker ec2-user   <=====
 
 #### Important: For this change to take effect, you must log out of your SSH session and log back in.
 
-exit # This will close your current SSH connection
+exit # This will close your current SSH connection  <=====
 
 #### Step 2: Reconnect and Clone Your Git Repository
 #### Reconnect to your EC2 instance via SSH:
 
-ssh -i /path/to/your-key-pair.pem ec2-user@YOUR_EC2_PUBLIC_IP_OR_DNS
-ssh -i /path/to/usent-st-docker-kp.pem ec2-user@44.212.65.235
+ssh -i /path/to/your-key-pair.pem ec2-user@YOUR_EC2_PUBLIC_IP_OR_DNS     <=====
+ssh -i /path/to/usent-kp2.pem ec2-user@54.204.79.186 
 
 you should see:
-Are you sure you want to continue connecting (yes/no/[fingerprint])? yes
+Are you sure you want to continue connecting (yes/no/[fingerprint])? yes     <=====
 Warning: Permanently added '44.212.65.235' (ED25519) to the list of known hosts.
 ec2-user@44.212.65.235: Permission denied (publickey,gssapi-keyex,gssapi-with-mic).
 
 
 #### Verify Docker permissions (optional, but good check):
-docker ps
+docker ps    <=====
 ##### You should see an empty list of containers without any permission errors.
 
 ##### Go to your home directory:
-cd ~
+cd ~     <=====
 
 #### Clone your Git repository (usent_st_docker):
 
-git clone https://github.com/CDQ-Analyst/usent_st_docker.git
+git clone https://github.com/CDQ-Analyst/usent_st_docker.git       <=====
 
 #### The error -bash: git: command not found means that Git isn't installed on this EC2 instance yet. No worries, that's an easy fix.
 
@@ -52,7 +52,7 @@ git clone https://github.com/CDQ-Analyst/usent_st_docker.git
 
 Bash
 
-sudo dnf install -y git
+sudo dnf install -y git         <=====
 #### (If dnf gives an error or isn't found, try sudo yum install -y git for older Amazon Linux versions).
 
 #### After Git finishes installing, you can then try the git clone command again.
